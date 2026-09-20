@@ -1,0 +1,40 @@
+spring:
+  profiles:
+    active: dev
+
+app:
+  name: hello-spring2
+  welcome-message: 欢迎学习 Spring Boot
+
+logging:
+  level:
+    root: info
+    org.masterh.hellospring2: debug
+
+jwt:
+  secret: masterh-learn-spring-jwt-secret-key-1234567890
+  expiration-ms: 3600000
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - info
+          - metrics
+          - prometheus
+
+  endpoint:
+    health:
+      show-details: when-authorized
+
+  info:
+    env:
+      enabled: true
+
+info:
+  app:
+    name: ${spring.application.name}
+    description: Spring Boot 学习项目哈
+    version: 1.0.0
