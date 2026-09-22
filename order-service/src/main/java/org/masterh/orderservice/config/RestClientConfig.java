@@ -17,16 +17,16 @@ import org.springframework.web.client.RestClient;
 public class RestClientConfig {
 
     // 普通 HTTP 客户端，供 Eureka 使用
-    @Bean
-    @Primary
-    public RestClient.Builder plainRestClientBuilder() {
-        return RestClient.builder();
-    }
+//    @Bean
+//    @Primary
+//    public RestClient.Builder plainRestClientBuilder() {
+//        return RestClient.builder();
+//    }
 
     // 带服务发现和负载均衡的客户端，供 UserClient 使用
-    @Bean("loadBalancedRestClientBuilder")
-    @LoadBalanced
-    public RestClient.Builder loadBalancedRestClientBuilder() {
-        return RestClient.builder();
-    }
+//    @Bean("loadBalancedRestClientBuilder")
+//    @LoadBalanced
+//    public RestClient.Builder loadBalancedRestClientBuilder() {
+//        return RestClient.builder();
+//    }
 }

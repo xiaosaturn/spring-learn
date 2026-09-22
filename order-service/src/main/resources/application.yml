@@ -1,6 +1,13 @@
 spring:
   application:
     name: order-service
+  cloud:
+    openfeign:
+      client:
+        config:
+          default:
+            connectTimeout: 2000
+            read-timeout: 3000
 
 server:
   port: 9102

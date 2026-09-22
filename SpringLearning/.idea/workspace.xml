@@ -4,7 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c091ad48-5542-4870-92cf-5d74f5b34250" name="Changes" comment="" />
+    <list default="true" id="c091ad48-5542-4870-92cf-5d74f5b34250" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../order-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../order-service/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../order-service/src/main/java/org/masterh/orderservice/OrderServiceApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/../order-service/src/main/java/org/masterh/orderservice/OrderServiceApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../order-service/src/main/java/org/masterh/orderservice/client/UserClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/../order-service/src/main/java/org/masterh/orderservice/client/UserClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../order-service/src/main/java/org/masterh/orderservice/config/RestClientConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/../order-service/src/main/java/org/masterh/orderservice/config/RestClientConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../order-service/src/main/java/org/masterh/orderservice/controller/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../order-service/src/main/java/org/masterh/orderservice/controller/OrderController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../order-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../order-service/src/main/resources/application.yml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -88,22 +95,13 @@
       <workItem from="1789741981704" duration="324000" />
       <workItem from="1789742320564" duration="599000" />
       <workItem from="1789779744348" duration="599000" />
-      <workItem from="1789868953964" duration="599000" />
+      <workItem from="1789868953964" duration="5962000" />
+      <workItem from="1790037170974" duration="597000" />
+      <workItem from="1790039900580" duration="601000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/org/masterh/Main.java</url>
-          <line>5</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
