@@ -3,6 +3,8 @@ spring:
     name: order-service
   cloud:
     openfeign:
+      circuitbreaker:
+        enabled: true
       client:
         config:
           default:

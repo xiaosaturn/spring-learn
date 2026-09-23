@@ -418,7 +418,7 @@ public class UserClient {
 
 ```text
 user-service：9101
-user-service：8103
+user-service：9103
 ```
 
 两个实例必须使用相同的服务名：
@@ -433,7 +433,7 @@ spring:
 
 ```text
 9101
-8103
+9103
 ```
 
 Eureka 中会显示两个：
@@ -570,7 +570,7 @@ LoadBalancer
     ↓
 Eureka 查询 user-service
     ↓
-找到 localhost:9101 或 localhost:8103
+找到 localhost:9101 或 localhost:9103
     ↓
 发送请求
 ```

@@ -17,7 +17,9 @@ import org.springframework.web.client.RestClient;
  * @Version 1.0
  **/
 
-@FeignClient(name = "user-service")
+@FeignClient(
+        name = "user-service",
+        fallbackFactory = UserClientFallbackFactory.class)
 public interface UserClient {
 
     @GetMapping("/users/{id}")
