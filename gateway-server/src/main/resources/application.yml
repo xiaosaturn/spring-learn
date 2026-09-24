@@ -13,6 +13,7 @@ spring:
                 - Path=/api/users/**
               filters:
                 - StripPrefix=1
+                - AddResponseHeader=X-Gateway, gateway-server
 
             - id: order-service-route
               uri: lb://order-service
@@ -20,6 +21,7 @@ spring:
                 - Path=/api/orders/**
               filters:
                 - StripPrefix=1
+                - AddResponseHeader=X-Gateway, gateway-server
 
 server:
   port: 9120

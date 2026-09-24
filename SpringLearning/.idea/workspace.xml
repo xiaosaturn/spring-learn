@@ -5,12 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c091ad48-5542-4870-92cf-5d74f5b34250" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../order-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../order-service/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../order-service/src/main/java/org/masterh/orderservice/OrderServiceApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/../order-service/src/main/java/org/masterh/orderservice/OrderServiceApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../order-service/src/main/java/org/masterh/orderservice/client/UserClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/../order-service/src/main/java/org/masterh/orderservice/client/UserClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../order-service/src/main/java/org/masterh/orderservice/config/RestClientConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/../order-service/src/main/java/org/masterh/orderservice/config/RestClientConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../order-service/src/main/java/org/masterh/orderservice/controller/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../order-service/src/main/java/org/masterh/orderservice/controller/OrderController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../order-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../order-service/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../gateway-server/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../gateway-server/src/main/resources/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -98,6 +93,7 @@
       <workItem from="1789868953964" duration="5962000" />
       <workItem from="1790037170974" duration="597000" />
       <workItem from="1790039900580" duration="601000" />
+      <workItem from="1790210409493" duration="367000" />
     </task>
     <servers />
   </component>
