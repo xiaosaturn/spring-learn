@@ -19,7 +19,7 @@ import java.nio.charset.StandardCharsets;
  * @Date 2026/9/24 9:03
  * @Version 1.0
  **/
-@Component
+//@Component
 public class GatewayAuthFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(
@@ -55,6 +55,7 @@ public class GatewayAuthFilter extends OncePerRequestFilter {
 
     private boolean isWhiteList(String path) {
         return path.startsWith("/actuator/health")
-                || path.startsWith("/api/public");
+                || path.startsWith("/api/public")
+                || path.startsWith("/api/auth/");
     }
 }
