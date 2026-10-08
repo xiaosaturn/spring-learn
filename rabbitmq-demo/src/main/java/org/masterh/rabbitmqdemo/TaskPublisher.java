@@ -24,10 +24,20 @@ public class TaskPublisher {
     public PublishResult publish(String text, boolean fail, String routingKey) {
         String id = UUID.randomUUID().toString();
         TaskMessage message = new TaskMessage(id, text, fail);
+        return publish(RabbitTopology.TASK_EXCHANGE, routingKey, message, id);
+    }
+
+    public PublishResult publishRetry(String text, int failTimes) {
+        String id = UUID.randomUUID().toString();
+        RetryTaskMessage message = new RetryTaskMessage(id, text, failTimes);
+        return publish(RetryTopology.TASK_EXCHANGE, RetryTopology.TASK_KEY, message, id);
+    }
+
+    private PublishResult publish(String exchange, String routingKey, Object message, String id) {
         CorrelationData correlation = new CorrelationData(id);
 
         try {
-            rabbitTemplate.convertAndSend(RabbitTopology.TASK_EXCHANGE, routingKey, message, amqpMessage -> {
+            rabbitTemplate.convertAndSend(exchange, routingKey, message, amqpMessage -> {
                 amqpMessage.getMessageProperties().setMessageId(id);
                 amqpMessage.getMessageProperties().setDeliveryMode(MessageDeliveryMode.PERSISTENT);
                 return amqpMessage;

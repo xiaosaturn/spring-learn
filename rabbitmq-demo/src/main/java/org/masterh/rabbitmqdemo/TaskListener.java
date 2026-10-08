@@ -16,7 +16,8 @@ public class TaskListener {
         this.processedTasks = processedTasks;
     }
 
-    @RabbitListener(queues = RabbitTopology.TASK_QUEUE, ackMode = "MANUAL")
+    @RabbitListener(queues = RabbitTopology.TASK_QUEUE, ackMode = "MANUAL",
+            autoStartup = "${lesson.task.listener-enabled:true}")
     public void handle(TaskMessage message, Channel channel,
                        @Header(AmqpHeaders.DELIVERY_TAG) long deliveryTag) throws IOException {
         if (message.fail()) {
