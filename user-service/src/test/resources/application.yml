@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: user-service
+  config:
+    import: "optional:configserver:"
+  cloud:
+    config:
+      enabled: false
+
+eureka:
+  client:
+    enabled: false
+
+lesson:
+  user-name: 测试用户

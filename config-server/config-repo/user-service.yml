@@ -1,0 +1,12 @@
+server:
+  port: 9101
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:9761/eureka/
+  instance:
+    prefer-ip-address: true
+
+lesson:
+  user-name: 张三（aaaaa来自配置中心）
