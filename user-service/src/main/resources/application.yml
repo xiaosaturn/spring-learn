@@ -3,3 +3,12 @@ spring:
     name: user-service
   config:
     import: configserver:http://localhost:9130
+
+management:
+  server:
+    address: 127.0.0.1
+    port: 9104
+  endpoints:
+    web:
+      exposure:
+        include: health,refresh

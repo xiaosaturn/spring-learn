@@ -9,4 +9,4 @@ eureka:
     prefer-ip-address: true
 
 lesson:
-  user-name: 张三（aaaaa来自配置中心）
+  user-name: 张三可以刷新了（aaaaa来自配置中心）
