@@ -41,15 +41,26 @@ management:
 
 ## 三、准备 RabbitMQ
 
-在 `config-server` 目录运行：
+本课使用远程 RabbitMQ：
+
+| 配置项 | 值 |
+| --- | --- |
+| AMQP 消息连接 | `121.4.77.117:5672` |
+| 管理页面 | [http://121.4.77.117:15670/](http://121.4.77.117:15670/) |
+| 用户名 | `rabbitmq` |
+| Virtual host | `/` |
+
+`15670` 是管理页面的 HTTP 端口，Java 客户端发送和接收消息使用 `5672`。二者用途不同，不能把管理页面的端口填进 RabbitMQ 连接配置。
+
+`rabbitmq-demo/.rabbitmq.env.example` 是连接配置模板，`rabbitmq-demo/.rabbitmq.env.local` 保存本机使用的实际配置，并已被 Git 忽略。若本地文件尚不存在，在仓库根目录复制模板：
 
 ```bash
-docker compose -f compose.rabbitmq.yml up -d --wait
+cp rabbitmq-demo/.rabbitmq.env.example rabbitmq-demo/.rabbitmq.env.local
 ```
 
-`compose.rabbitmq.yml` 把 RabbitMQ 的 AMQP 端口 `5672` 和管理页面端口 `15672` 映射到本机地址。Spring Boot 在本机练习时使用默认的 RabbitMQ 连接地址。可访问 `http://127.0.0.1:15672` 查看 RabbitMQ 管理页面；本地示例使用默认账号 `guest`、密码 `guest`。
+在本地文件中填写密码。连接配置使用 Spring Boot 的标准环境变量：`SPRING_RABBITMQ_HOST`、`SPRING_RABBITMQ_PORT`、`SPRING_RABBITMQ_USERNAME`、`SPRING_RABBITMQ_PASSWORD` 和 `SPRING_RABBITMQ_VIRTUAL_HOST`。密码只放在本地文件，不写进课程文档或提交到 Git。
 
-启动 Config Server：
+在 `config-server` 目录启动 Config Server：
 
 ```bash
 bash ./mvnw spring-boot:run
@@ -63,25 +74,41 @@ bash ./mvnw spring-boot:run
 bash ./mvnw package
 ```
 
-然后在两个终端分别运行：
+然后在两个终端分别进入 `user-service` 目录，加载连接环境变量并启动实例。`set -a` 会让文件中的变量成为 Java 进程可以读取的环境变量，`set +a` 在加载后关闭这个选项。
+
+终端 A：
 
 ```bash
+set -a
+source ../rabbitmq-demo/.rabbitmq.env.local
+set +a
+
 java -jar target/user-service-0.0.1-SNAPSHOT.jar \
   --server.port=9102 \
   --management.server.port=9105 \
   --spring.application.index=1 \
+  --spring.cloud.bus.destination=spring-learn-bus \
   --eureka.client.enabled=false
 ```
 
+终端 B：
+
 ```bash
+set -a
+source ../rabbitmq-demo/.rabbitmq.env.local
+set +a
+
 java -jar target/user-service-0.0.1-SNAPSHOT.jar \
   --server.port=9103 \
   --management.server.port=9106 \
   --spring.application.index=2 \
+  --spring.cloud.bus.destination=spring-learn-bus \
   --eureka.client.enabled=false
 ```
 
 两个业务端口和管理端口各不相同。`spring.application.index` 也各不相同，让两个实例拥有不同的 Bus ID；否则事件可能被误判为来自同一个实例。这次实验直接访问用户服务，因此关闭 Eureka 客户端，减少无关的启动依赖。
+
+两个实例都设置 `spring.cloud.bus.destination=spring-learn-bus`，让本课的配置刷新事件使用同一个专用消息目的地。远程服务器上可能还运行其他应用；使用课程自己的目的地可以把这些事件与其他应用使用的 Bus 目的地分开。需要互相刷新配置的实例必须使用相同的目的地。
 
 ## 五、观察一次广播刷新
 
@@ -107,15 +134,47 @@ curl http://localhost:9102/users/1
 curl http://localhost:9103/users/1
 ```
 
-两个名字都应变成新值。如果只有一个实例改变，先检查两个实例是否连接到同一个 RabbitMQ，再检查它们的 Bus ID 是否不同。
+两个名字都应变成新值。如果只有一个实例改变，先检查两个实例是否连接到同一个 RabbitMQ 和 virtual host、是否都使用 `spring-learn-bus`，再检查它们的 Bus ID 是否不同。
 
-如果启动日志反复出现 `Connection refused`，先确认 RabbitMQ 容器已经处于健康状态，再发送刷新请求。
+如果启动日志反复出现 `Connection refused`，先检查是否加载了 `.rabbitmq.env.local`，以及远程 AMQP 端口 `5672` 是否可连接。管理页面可以打开，并不代表消息端口一定可连接。若提示认证或权限错误，检查账号、密码，以及账号在 `/` virtual host 中的权限，再发送刷新请求。
 
 与第 31 课比较：若改用 `POST http://127.0.0.1:9105/actuator/refresh`，只会刷新实例 A；实例 B 不会因这次请求而更新。
 
+### 2026-10-08 实测结果
+
+已用远程 `121.4.77.117:5672` 和课程目的地 `spring-learn-bus` 完成双实例验证。测试采用独立的临时配置目录及端口，结果如下：
+
+| 阶段 | 实例 A | 实例 B |
+| --- | --- | --- |
+| 启动时 | `Bus远程验证-刷新前` | `Bus远程验证-刷新前` |
+| 修改配置后，尚未发事件 | `Bus远程验证-刷新前` | `Bus远程验证-刷新前` |
+| 只向 A 发一次 `busrefresh` 后 | `Bus远程验证-刷新后` | `Bus远程验证-刷新后` |
+
+刷新接口返回 HTTP `204`。两个实例各有一条绑定到 `spring-learn-bus` 的临时队列；同一次事件通过 RabbitMQ 送达两个实例。
+
 ## 六、练习结束
 
-停止两个 `user-service` 进程和 Config Server，然后在 `config-server` 目录关闭本课的 RabbitMQ 容器：
+停止自己启动的两个 `user-service` 进程和 Config Server。远程 RabbitMQ 继续运行，不需要关闭服务器或清空队列。
+
+### 可选：使用本地 Docker RabbitMQ
+
+如果需要在本机独立练习，可以在 `config-server` 目录启动仓库中的容器配置：
+
+```bash
+docker compose -f compose.rabbitmq.yml up -d --wait
+```
+
+本地 AMQP 地址为 `127.0.0.1:5672`，管理页面为 [http://127.0.0.1:15672](http://127.0.0.1:15672)，示例账号和密码均为 `guest`。两个 `user-service` 终端在加载本地环境文件之后、启动 Java 进程之前，分别覆盖这些变量：
+
+```bash
+export SPRING_RABBITMQ_HOST=127.0.0.1
+export SPRING_RABBITMQ_PORT=5672
+export SPRING_RABBITMQ_USERNAME=guest
+export SPRING_RABBITMQ_PASSWORD=guest
+export SPRING_RABBITMQ_VIRTUAL_HOST=/
+```
+
+继续使用上面的两份启动命令，保留不同的端口与实例编号。仅在使用这个本地容器方案时，练习结束后才在 `config-server` 目录关闭本课容器：
 
 ```bash
 docker compose -f compose.rabbitmq.yml down
@@ -125,7 +184,7 @@ docker compose -f compose.rabbitmq.yml down
 
 - Config Server 保存并提供最新配置。
 - Bus 使用 RabbitMQ 传播刷新事件；各实例收到事件后重新读取配置。
-- 两个实例需要不同的 Bus ID，并且都要连接同一个消息代理。
+- 两个实例需要不同的 Bus ID，并且都要连接同一个消息代理、virtual host 和 Bus 目的地。
 - 配置文件变化不会自动产生 Bus 事件；本课由 `/actuator/busrefresh` 手动发起。
 
 参考资料：

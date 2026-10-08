@@ -1,0 +1,19 @@
+server:
+  address: 127.0.0.1
+  port: 9140
+
+spring:
+  application:
+    name: rabbitmq-demo
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
+    publisher-confirm-type: correlated
+    publisher-returns: true
+    template:
+      mandatory: true
+    listener:
+      simple:
+        prefetch: 1
