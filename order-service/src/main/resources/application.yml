@@ -21,3 +21,9 @@ eureka:
 
   instance:
     prefer-ip-address: true
+
+management:
+  tracing:
+    export:
+      zipkin:
+        enabled: false

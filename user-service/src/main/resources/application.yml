@@ -1,10 +1,12 @@
 spring:
   application:
     name: user-service
-  config:
-    import: configserver:http://localhost:9130
 
 management:
+  tracing:
+    export:
+      zipkin:
+        enabled: false
   server:
     address: 127.0.0.1
     port: 9104
@@ -12,3 +14,11 @@ management:
     web:
       exposure:
         include: health,refresh,busrefresh
+
+---
+# 配置导入会先于 application-tracing.yml 处理，必须在这里按 profile 隔离。
+spring:
+  config:
+    activate:
+      on-profile: "!tracing"
+    import: configserver:http://localhost:9130

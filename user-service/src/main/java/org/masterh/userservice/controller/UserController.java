@@ -1,6 +1,8 @@
 package org.masterh.userservice.controller;
 
 import org.masterh.userservice.dto.UserResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RefreshScope
 @RequestMapping("/users")
 public class UserController {
+    private static final Logger log = LoggerFactory.getLogger(UserController.class);
     private final String userName;
 
     public UserController(@Value("${lesson.user-name}") String userName) {
@@ -27,6 +30,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     public UserResponse findById(@PathVariable Integer id) {
+        log.info("查询用户：userId={}", id);
         return new UserResponse(
                 id,
                 userName,
