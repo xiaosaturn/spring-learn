@@ -14,7 +14,8 @@ public class RetryTaskListener {
         this.progress = progress;
     }
 
-    @RabbitListener(queues = RetryTopology.TASK_QUEUE, containerFactory = "retryListenerContainerFactory")
+    @RabbitListener(queues = RetryTopology.TASK_QUEUE, containerFactory = "retryListenerContainerFactory",
+            autoStartup = "${lesson.retry.listener-enabled:true}")
     public void handle(RetryTaskMessage message) {
         RetryTaskProgress.Progress current = progress.beginAttempt(message);
         if (current.status() == RetryTaskProgress.Status.SUCCEEDED) {

@@ -33,6 +33,10 @@ public class TaskPublisher {
         return publish(RetryTopology.TASK_EXCHANGE, RetryTopology.TASK_KEY, message, id);
     }
 
+    public PublishResult publishDelay(DelayOrderMessage message) {
+        return publish(DelayTopology.WAIT_EXCHANGE, DelayTopology.WAIT_KEY, message, message.orderId());
+    }
+
     private PublishResult publish(String exchange, String routingKey, Object message, String id) {
         CorrelationData correlation = new CorrelationData(id);
 
