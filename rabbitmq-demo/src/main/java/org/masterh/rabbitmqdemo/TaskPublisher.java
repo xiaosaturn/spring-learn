@@ -37,6 +37,12 @@ public class TaskPublisher {
         return publish(DelayTopology.WAIT_EXCHANGE, DelayTopology.WAIT_KEY, message, message.orderId());
     }
 
+    public PublishResult publishTopic(String orderId, String eventType, String routingKey) {
+        String id = UUID.randomUUID().toString();
+        TopicOrderEvent event = new TopicOrderEvent(id, orderId, eventType);
+        return publish(TopicTopology.EXCHANGE, routingKey, event, id);
+    }
+
     private PublishResult publish(String exchange, String routingKey, Object message, String id) {
         CorrelationData correlation = new CorrelationData(id);
 
